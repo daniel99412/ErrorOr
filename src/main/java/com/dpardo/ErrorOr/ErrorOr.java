@@ -1,5 +1,6 @@
 package com.dpardo.ErrorOr;
 
+import com.dpardo.Error.Error;
 import com.dpardo.Error.utils.ErrorComparer;
 import com.dpardo.ErrorOr.extensions.Else;
 import com.dpardo.ErrorOr.extensions.FailIf;
@@ -82,7 +83,7 @@ public class ErrorOr<TValue> implements IErrorOr.WithValue<TValue> {
      */
     @Override
     public Boolean isError() {
-        return errors != null;
+        return (errors != null && !errors.isEmpty());
     }
 
     /**

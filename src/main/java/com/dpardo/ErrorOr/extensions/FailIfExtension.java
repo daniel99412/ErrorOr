@@ -1,6 +1,7 @@
 package com.dpardo.ErrorOr.extensions;
 
 import com.dpardo.ErrorOr.ErrorOr;
+import com.dpardo.Error.Error;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;

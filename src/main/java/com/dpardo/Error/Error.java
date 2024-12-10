@@ -115,7 +115,7 @@ public record Error(
      * @return A new {@link Error} instance with the forbidden type.
      */
     public static Error forbidden(String code, String description, Map<String, Object> metadata) {
-        return new Error(code, description, ErrorType.Forbiden, metadata);
+        return new Error(code, description, ErrorType.Forbidden, metadata);
     }
 
     /**

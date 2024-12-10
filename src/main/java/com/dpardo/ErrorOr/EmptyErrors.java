@@ -1,5 +1,7 @@
 package com.dpardo.ErrorOr;
 
+import com.dpardo.Error.Error;
+
 import java.util.Collections;
 import java.util.List;
 
