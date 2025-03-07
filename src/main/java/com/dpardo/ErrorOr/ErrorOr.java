@@ -56,9 +56,9 @@ public class ErrorOr<TValue> implements IErrorOr.WithValue<TValue> {
      */
     private ErrorOr(List<Error> errors) {
         if (errors == null || errors.isEmpty()) {
-            throw new IllegalArgumentException("Errors cannot be null");
+            throw new IllegalArgumentException("Errors cannot be null or empty");
         }
-        this.errors = errors;
+        this.errors = List.copyOf(errors);
         this.value = null;
     }
 

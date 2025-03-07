@@ -14,7 +14,6 @@ import java.util.List;
  *
  * This class cannot be instantiated as it only contains static methods and fields.
  */
-
 public final class EmptyErrors {
     /**
      * A static, unmodifiable list representing an empty set of errors.
