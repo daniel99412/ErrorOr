@@ -45,4 +45,4 @@ Contributing
 Feel free to fork the repository, create a branch, and submit a pull request. Please make sure your code follows the project’s conventions and includes tests.
 
 ## License
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the GNU General Public License v3 (GPL-3.0) - see the LICENSE file for details.
