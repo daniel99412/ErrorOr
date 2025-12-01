@@ -4,11 +4,15 @@ import com.dpardo.Error.Error;
 import com.dpardo.Error.utils.ErrorComparer;
 import com.dpardo.ErrorOr.extensions.Else;
 import com.dpardo.ErrorOr.extensions.FailIf;
+import com.dpardo.ErrorOr.extensions.Map;
+import com.dpardo.ErrorOr.extensions.Match;
+import com.dpardo.ErrorOr.extensions.Then;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -162,6 +166,58 @@ public class ErrorOr<TValue> implements IErrorOr.WithValue<TValue> {
             hashCode = 31 * hashCode + Objects.hash(error);
         }
         return hashCode;
+    }
+
+    /**
+     * Delegates the matching operation to the {@link Match#match(ErrorOr, Function, Function)} method.
+     *
+     * Processes the ErrorOr by executing one of two provided functions, based on whether it's a value or an error.
+     *
+     * @param onValue The function to execute if the ErrorOr contains a value.
+     * @param onError The function to execute if the ErrorOr contains errors.
+     * @param <TResult> The return type of the functions.
+     * @return The result of the executed function.
+     */
+    public <TResult> TResult match(Function<TValue, TResult> onValue, Function<List<Error>, TResult> onError) {
+        return Match.match(this, onValue, onError);
+    }
+
+    /**
+     * Delegates the matching operation to the {@link Match#match(ErrorOr, Consumer, Consumer)} method.
+     *
+     * Processes the ErrorOr by executing one of two provided consumers, based on whether it's a value or an error.
+     *
+     * @param onValue The consumer to execute if the ErrorOr contains a value.
+     * @param onError The consumer to execute if the ErrorOr contains errors.
+     */
+    public void match(Consumer<TValue> onValue, Consumer<List<Error>> onError) {
+        Match.match(this, onValue, onError);
+    }
+
+    /**
+     * Delegates the mapping operation to the {@link Map#map(ErrorOr, Function)} method.
+     *
+     * Transforms the value of the ErrorOr if it is not an error.
+     *
+     * @param onValue The function to apply to the value.
+     * @param <TNextValue> The type of the new value.
+     * @return A new ErrorOr with the transformed value, or the original errors.
+     */
+    public <TNextValue> ErrorOr<TNextValue> map(Function<TValue, TNextValue> onValue) {
+        return Map.map(this, onValue);
+    }
+
+    /**
+     * Delegates the chaining operation to the {@link Then#then(ErrorOr, Function)} method.
+     *
+     * Chains a function that returns an ErrorOr, effectively flat-mapping the result.
+     *
+     * @param onValue The function to apply to the value, which returns a new ErrorOr.
+     * @param <TNextValue> The value type of the new ErrorOr.
+     * @return The result of the function, or an ErrorOr with the original errors.
+     */
+    public <TNextValue> ErrorOr<TNextValue> then(Function<TValue, ErrorOr<TNextValue>> onValue) {
+        return Then.then(this, onValue);
     }
 
     /**
