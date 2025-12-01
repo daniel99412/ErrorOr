@@ -118,7 +118,7 @@ ErrorOr<String> result2 = ErrorOr.from(Error.unexpected("Db.Error", "Database co
 // result2 will be an ErrorOr containing "Recovered Value".
 ```
 
-Contributing
+## Contributing
 Feel free to fork the repository, create a branch, and submit a pull request. Please make sure your code follows the project’s conventions and includes tests.
 
 ## License
