@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="755d9043-cf82-45e2-ae1b-c9facc94bba9" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/dpardo/ErrorOr/ErrorOr.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/dpardo/ErrorOr/ErrorOr.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/dpardo/ErrorOr/ErrorOrFactory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/dpardo/ErrorOr/extensions/Else.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/dpardo/ErrorOr/extensions/Else.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/dpardo/ErrorOr/extensions/FailIf.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/dpardo/ErrorOr/extensions/FailIf.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/dpardo/ErrorOr/extensions/Map.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/dpardo/ErrorOr/extensions/Map.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/dpardo/ErrorOr/extensions/Then.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/dpardo/ErrorOr/extensions/Then.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/dpardo/ErrorOr/ErrorOrTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/dpardo/ErrorOr/ErrorOrTest.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view />
+      </state>
+    </system>
+  </component>
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "git-widget-placeholder": "main"
+  }
+}]]></component>
+  <component name="TaskManager">
+    <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="LAST_COMMIT_MESSAGE" value="" />
+  </component>
+</project>
