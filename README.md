@@ -83,6 +83,41 @@ public ErrorOr<String> process(int a, int b, int c) {
 // Calling process(100, 0, 5) will return an ErrorOr with the "Cannot divide by zero." error.
 ```
 
+### `failIf()`
+The `failIf` method allows you to introduce a failure condition into a chain of operations. If the condition is met, the chain will stop and return the specified error.
+
+```java
+public ErrorOr<String> checkLength(String input) {
+    return ErrorOr.fromValue(input)
+        .failIf(s -> s.length() < 5, Error.validation("Length.TooShort", "Input must be at least 5 characters.", null))
+        .map(s -> "Input is valid");
+}
+
+// checkLength("123") will return an ErrorOr with the "Length.TooShort" error.
+// checkLength("12345") will return an ErrorOr with "Input is valid".
+```
+
+### `else()`
+The `else` methods provide a way to recover from an error state. You can use it to provide a default value, a new `ErrorOr` instance, or execute some logic to handle the error.
+
+```java
+// Recover with a default value
+ErrorOr<String> result = ErrorOr.from(Error.notFound("User.NotFound", "User was not found.", null))
+    .elseValue("Default User");
+
+// result will be an ErrorOr containing "Default User".
+
+// Recover by executing a function
+ErrorOr<String> result2 = ErrorOr.from(Error.unexpected("Db.Error", "Database connection failed.", null))
+    .elseFuncValue(errors -> {
+        // Log the errors
+        System.err.println("Recovering from error: " + errors.get(0).description());
+        return "Recovered Value";
+    });
+
+// result2 will be an ErrorOr containing "Recovered Value".
+```
+
 Contributing
 Feel free to fork the repository, create a branch, and submit a pull request. Please make sure your code follows the project’s conventions and includes tests.
 
