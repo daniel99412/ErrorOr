@@ -3,7 +3,7 @@ plugins {
     id("maven-publish")
 }
 
-group = "com.dpardo"
+group = "io.github.daniel99412"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -31,8 +31,8 @@ java {
 
 publishing {
     publications {
-        create<MavenPublication>("mavenJava") {
-            from(components["java"])
+        create("mavenJava", MavenPublication) {
+            from components.java
         }
     }
 }
