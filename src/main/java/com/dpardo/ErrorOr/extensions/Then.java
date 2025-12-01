@@ -24,7 +24,7 @@ public class Then {
      */
     public static <TValue, TNextValue> ErrorOr<TNextValue> then(ErrorOr<TValue> errorOr, Function<TValue, ErrorOr<TNextValue>> onValue) {
         if (errorOr.isError()) {
-            return ErrorOr.from(errorOr.getErrors());
+            return ErrorOr.errors(errorOr.getErrors());
         }
         return onValue.apply(errorOr.getValue());
     }

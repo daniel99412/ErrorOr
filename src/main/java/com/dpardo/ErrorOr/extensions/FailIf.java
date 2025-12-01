@@ -24,7 +24,7 @@ public class FailIf {
             return errorOr;
         }
 
-        return onValue.apply(errorOr.getValue()) ? ErrorOr.from(List.of(error)) : errorOr;
+        return onValue.apply(errorOr.getValue()) ? ErrorOr.errors(List.of(error)) : errorOr;
     }
 
     /**
@@ -43,7 +43,7 @@ public class FailIf {
             return errorOr;
         }
 
-        return onValue.apply(errorOr.getValue()) ? ErrorOr.from(errorBuilder.apply(errorOr.getValue())) : errorOr;
+        return onValue.apply(errorOr.getValue()) ? ErrorOr.error(errorBuilder.apply(errorOr.getValue())) : errorOr;
     }
 
     /**
@@ -65,7 +65,7 @@ public class FailIf {
             return CompletableFuture.completedFuture(errorOr);
         }
 
-        return onValue.apply(errorOr.getValue()).thenApply(result -> result ? ErrorOr.from(List.of(error)) : errorOr);
+        return onValue.apply(errorOr.getValue()).thenApply(result -> result ? ErrorOr.errors(List.of(error)) : errorOr);
     }
 
     /**
@@ -89,7 +89,7 @@ public class FailIf {
 
         return onValue.apply(errorOr.getValue()).thenCompose(result -> {
             if (result) {
-                return errorBuilder.apply(errorOr.getValue()).thenApply(error -> ErrorOr.from(List.of(error)));
+                return errorBuilder.apply(errorOr.getValue()).thenApply(error -> ErrorOr.errors(List.of(error)));
             }
             return CompletableFuture.completedFuture(errorOr);
         });

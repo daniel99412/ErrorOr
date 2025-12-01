@@ -4,9 +4,14 @@ import com.dpardo.Error.Error;
 import com.dpardo.Error.utils.ErrorComparer;
 import com.dpardo.ErrorOr.extensions.Else;
 import com.dpardo.ErrorOr.extensions.FailIf;
+import com.dpardo.ErrorOr.extensions.Filter;
 import com.dpardo.ErrorOr.extensions.Map;
+import com.dpardo.ErrorOr.extensions.MapAsync;
+import com.dpardo.ErrorOr.extensions.MapError;
 import com.dpardo.ErrorOr.extensions.Match;
 import com.dpardo.ErrorOr.extensions.Then;
+import com.dpardo.ErrorOr.extensions.ThenAsync;
+import com.dpardo.ErrorOr.extensions.Peek;
 
 import java.util.Collections;
 import java.util.List;
@@ -14,6 +19,7 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * Represents a result that can either be a valid value or contain a list of errors.
@@ -105,6 +111,26 @@ public class ErrorOr<TValue> implements IErrorOr.WithValue<TValue> {
     }
 
     /**
+     * Gets the value if present, otherwise returns the provided default value.
+     *
+     * @param defaultValue The default value to return if the instance is an error.
+     * @return The value or the default value.
+     */
+    public TValue getOrElse(TValue defaultValue) {
+        return isError() ? defaultValue : this.value;
+    }
+
+    /**
+     * Gets the value if present, otherwise returns the value from the provided supplier.
+     *
+     * @param defaultSupplier The supplier for the default value.
+     * @return The value or the supplied default value.
+     */
+    public TValue orElse(java.util.function.Supplier<? extends TValue> defaultSupplier) {
+        return isError() ? defaultSupplier.get() : this.value;
+    }
+
+    /**
      * Retrieves the list of errors if present.
      *
      * @return An unmodifiable list of errors.
@@ -113,14 +139,14 @@ public class ErrorOr<TValue> implements IErrorOr.WithValue<TValue> {
     @Override
     public List<Error> getErrors() {
         if (isError()) {
-            return Collections.unmodifiableList(errors);
+            return errors;
         }
         throw new IllegalStateException("The Errors property cannot be accessed when no errors have been recorded. Check isError() before accessing Errors.");
     }
 
     /**
      * Compares this {@link ErrorOr} instance with another object for equality.
-     *
+     * <p>
      * This method first checks if the two objects are the same instance. If they are not, it checks if the
      * objects are of the same class. If the objects are of the same class, it compares them based on whether
      * they represent errors or values. If both objects are not errors, their values are compared for equality.
@@ -148,7 +174,7 @@ public class ErrorOr<TValue> implements IErrorOr.WithValue<TValue> {
 
     /**
      * Generates a hash code for this {@link ErrorOr} instance.
-     *
+     * <p>
      * This method computes the hash code for the instance based on whether the instance represents an error
      * or a value. If the instance represents a value, the hash code is generated from the value. If the instance
      * represents errors, the hash code is calculated by combining the hash codes of the individual errors in the list.
@@ -170,7 +196,7 @@ public class ErrorOr<TValue> implements IErrorOr.WithValue<TValue> {
 
     /**
      * Delegates the matching operation to the {@link Match#match(ErrorOr, Function, Function)} method.
-     *
+     * <p>
      * Processes the ErrorOr by executing one of two provided functions, based on whether it's a value or an error.
      *
      * @param onValue The function to execute if the ErrorOr contains a value.
@@ -184,7 +210,7 @@ public class ErrorOr<TValue> implements IErrorOr.WithValue<TValue> {
 
     /**
      * Delegates the matching operation to the {@link Match#match(ErrorOr, Consumer, Consumer)} method.
-     *
+     * <p>
      * Processes the ErrorOr by executing one of two provided consumers, based on whether it's a value or an error.
      *
      * @param onValue The consumer to execute if the ErrorOr contains a value.
@@ -196,7 +222,7 @@ public class ErrorOr<TValue> implements IErrorOr.WithValue<TValue> {
 
     /**
      * Delegates the mapping operation to the {@link Map#map(ErrorOr, Function)} method.
-     *
+     * <p>
      * Transforms the value of the ErrorOr if it is not an error.
      *
      * @param onValue The function to apply to the value.
@@ -209,7 +235,7 @@ public class ErrorOr<TValue> implements IErrorOr.WithValue<TValue> {
 
     /**
      * Delegates the chaining operation to the {@link Then#then(ErrorOr, Function)} method.
-     *
+     * <p>
      * Chains a function that returns an ErrorOr, effectively flat-mapping the result.
      *
      * @param onValue The function to apply to the value, which returns a new ErrorOr.
@@ -221,13 +247,61 @@ public class ErrorOr<TValue> implements IErrorOr.WithValue<TValue> {
     }
 
     /**
+     * Delegates the filtering operation to the {@link Filter#filter(ErrorOr, Predicate, Error)} method.
+     * <p>
+     * If the ErrorOr contains a value, it is tested against the predicate. If the test fails,
+     * a new ErrorOr containing the provided error is returned.
+     *
+     * @param predicate The predicate to test the value against.
+     * @param error The error to return if the predicate fails.
+     * @return The original ErrorOr if the test passes or if it already contains an error,
+     *         otherwise a new ErrorOr with the provided error.
+     */
+    public ErrorOr<TValue> filter(Predicate<TValue> predicate, Error error) {
+        return Filter.filter(this, predicate, error);
+    }
+
+    /**
+     * If the instance has a value, performs the given action on it.
+     * Delegates to the {@link Peek#peek(ErrorOr, Consumer)} method.
+     *
+     * @param action The action to perform.
+     * @return The original {@link ErrorOr} instance.
+     */
+    public ErrorOr<TValue> peek(Consumer<TValue> action) {
+        return Peek.peek(this, action);
+    }
+
+    /**
+     * If the instance has an error, performs the given action on the list of errors.
+     * Delegates to the {@link Peek#peekError(ErrorOr, Consumer)} method.
+     *
+     * @param action The action to perform.
+     * @return The original {@link ErrorOr} instance.
+     */
+    public ErrorOr<TValue> peekError(Consumer<List<Error>> action) {
+        return Peek.peekError(this, action);
+    }
+
+    /**
+     * If the instance has an error, transforms the errors using the provided mapping function.
+     * Delegates to the {@link MapError#mapError(ErrorOr, Function)} method.
+     *
+     * @param mapping The function to transform each error.
+     * @return A new {@link ErrorOr} with the transformed errors, or the original instance if it has a value.
+     */
+    public ErrorOr<TValue> mapError(Function<Error, Error> mapping) {
+        return MapError.mapError(this, mapping);
+    }
+
+    /**
      * Retrieves the errors if present or returns an empty list.
      *
      * @return An unmodifiable list of errors or an empty list if no errors are present.
      */
     public List<Error> getErrorsOrEmptyList() {
         return isError()
-            ? Collections.unmodifiableList(errors)
+            ? errors
             : EmptyErrors.getInstance();
     }
 
@@ -251,8 +325,8 @@ public class ErrorOr<TValue> implements IErrorOr.WithValue<TValue> {
      * @param error The error to associate with the instance.
      * @return A new instance of ErrorOr containing the error.
      */
-    public static <TValue> ErrorOr<TValue> from(Error error) {
-        return new ErrorOr(error);
+    public static <TValue> ErrorOr<TValue> error(Error error) {
+        return new ErrorOr<>(error);
     }
 
     /**
@@ -262,8 +336,8 @@ public class ErrorOr<TValue> implements IErrorOr.WithValue<TValue> {
      * @param errors The list of errors to associate with the instance.
      * @return A new instance of ErrorOr containing the errors.
      */
-    public static <TValue> ErrorOr<TValue> from(List<Error> errors) {
-        return new ErrorOr(errors);
+    public static <TValue> ErrorOr<TValue> errors(List<Error> errors) {
+        return new ErrorOr<>(errors);
     }
 
     /**
@@ -274,8 +348,8 @@ public class ErrorOr<TValue> implements IErrorOr.WithValue<TValue> {
      * @return A new instance of ErrorOr containing the value.
      * @throws IllegalArgumentException if the value is null.
      */
-    public static <TValue> ErrorOr<TValue> fromValue(TValue value) {
-        return new ErrorOr(value);
+    public static <TValue> ErrorOr<TValue> of(TValue value) {
+        return new ErrorOr<>(value);
     }
 
     /**
@@ -344,7 +418,7 @@ public class ErrorOr<TValue> implements IErrorOr.WithValue<TValue> {
 
     /**
      * Delegates the failure handling to the {@link Else#elseFunc} method.
-     *
+      <p>
      * If the current {@link ErrorOr} instance contains an error, it delegates to the {@link Else#elseFunc} method
      * with the provided function that processes the list of errors. This method returns a new {@link ErrorOr}
      * containing the result of the error handling function. If no error is present, the original {@link ErrorOr} is returned.
@@ -358,7 +432,7 @@ public class ErrorOr<TValue> implements IErrorOr.WithValue<TValue> {
 
     /**
      * Delegates the failure handling to the {@link Else#elseFuncList} method.
-     *
+     * <p>
      * If the current {@link ErrorOr} instance contains an error, it delegates to the {@link Else#elseFuncList} method
      * with the provided function that processes the list of errors. This method returns a new {@link ErrorOr}
      * containing the transformed list of errors. If no error is present, the original {@link ErrorOr} is returned.
@@ -491,5 +565,31 @@ public class ErrorOr<TValue> implements IErrorOr.WithValue<TValue> {
      */
     public CompletableFuture<ErrorOr<TValue>> elseAsyncValue(CompletableFuture<TValue> onError) {
         return Else.elseAsyncValue(this, onError);
+    }
+
+    /**
+     * Delegates the asynchronous mapping operation to the {@link MapAsync#mapAsync(ErrorOr, Function)} method.
+     * <p>
+     * Asynchronously transforms the value of the ErrorOr if it is not an error.
+     *
+     * @param onValue The asynchronous function to apply to the value.
+     * @param <TNextValue> The type of the new value.
+     * @return A CompletableFuture containing a new ErrorOr with the transformed value, or the original errors.
+     */
+    public <TNextValue> CompletableFuture<ErrorOr<TNextValue>> mapAsync(Function<TValue, CompletableFuture<TNextValue>> onValue) {
+        return MapAsync.mapAsync(this, onValue);
+    }
+
+    /**
+     * Delegates the asynchronous chaining operation to the {@link ThenAsync#thenAsync(ErrorOr, Function)} method.
+     * <p>
+     * Asynchronously chains a function that returns a CompletableFuture of an ErrorOr.
+     *
+     * @param onValue The asynchronous function to apply to the value.
+     * @param <TNextValue> The value type of the new ErrorOr.
+     * @return A CompletableFuture representing the result of the chained operation.
+     */
+    public <TNextValue> CompletableFuture<ErrorOr<TNextValue>> thenAsync(Function<TValue, CompletableFuture<ErrorOr<TNextValue>>> onValue) {
+        return ThenAsync.thenAsync(this, onValue);
     }
 }

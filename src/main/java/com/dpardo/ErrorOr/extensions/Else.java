@@ -27,7 +27,7 @@ public class Else {
         if (!errorOr.isError()) {
             return errorOr;
         }
-        return ErrorOr.from(onError.apply(errorOr.getErrors()));
+        return ErrorOr.error(onError.apply(errorOr.getErrors()));
     }
 
     /**
@@ -43,7 +43,7 @@ public class Else {
         if (!errorOr.isError()) {
             return errorOr;
         }
-        return ErrorOr.from(onError.apply(errorOr.getErrors()));
+        return ErrorOr.errors(onError.apply(errorOr.getErrors()));
     }
 
     /**
@@ -59,7 +59,7 @@ public class Else {
         if (!errorOr.isError()) {
             return errorOr;
         }
-        return ErrorOr.from(List.of(error));
+        return ErrorOr.errors(List.of(error));
     }
 
     /**
@@ -75,7 +75,7 @@ public class Else {
         if (!errorOr.isError()) {
             return errorOr;
         }
-        return ErrorOr.fromValue(onError.apply(errorOr.getErrors()));
+        return ErrorOr.of(onError.apply(errorOr.getErrors()));
     }
 
     /**
@@ -91,7 +91,7 @@ public class Else {
         if (!errorOr.isError()) {
             return errorOr;
         }
-        return ErrorOr.fromValue(onError);
+        return ErrorOr.of(onError);
     }
 
     /**
@@ -108,7 +108,7 @@ public class Else {
         if (!errorOr.isError()) {
             return CompletableFuture.completedFuture(errorOr);
         }
-        return onError.apply(errorOr.getErrors()).thenApply(ErrorOr::fromValue);
+        return onError.apply(errorOr.getErrors()).thenApply(ErrorOr::of);
     }
 
     /**
@@ -125,7 +125,7 @@ public class Else {
         if (!errorOr.isError()) {
             return CompletableFuture.completedFuture(errorOr);
         }
-        return onError.apply(errorOr.getErrors()).thenApply(err -> ErrorOr.from(List.of(err)));
+        return onError.apply(errorOr.getErrors()).thenApply(err -> ErrorOr.errors(List.of(err)));
     }
 
     /**
@@ -142,7 +142,7 @@ public class Else {
         if (!errorOr.isError()) {
             return CompletableFuture.completedFuture(errorOr);
         }
-        return onError.apply(errorOr.getErrors()).thenApply(ErrorOr::from);
+        return onError.apply(errorOr.getErrors()).thenApply(ErrorOr::errors);
     }
 
     /**
@@ -158,7 +158,7 @@ public class Else {
         if (!errorOr.isError()) {
             return CompletableFuture.completedFuture(errorOr);
         }
-        return error.thenApply(err -> ErrorOr.from(List.of(err)));
+        return error.thenApply(err -> ErrorOr.errors(List.of(err)));
     }
 
     /**
@@ -174,6 +174,6 @@ public class Else {
         if (!errorOr.isError()) {
             return CompletableFuture.completedFuture(errorOr);
         }
-        return onError.thenApply(ErrorOr::fromValue);
+        return onError.thenApply(ErrorOr::of);
     }
 }

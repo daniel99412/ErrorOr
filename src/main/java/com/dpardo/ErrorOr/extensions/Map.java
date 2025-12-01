@@ -24,8 +24,8 @@ public class Map {
      */
     public static <TValue, TNextValue> ErrorOr<TNextValue> map(ErrorOr<TValue> errorOr, Function<TValue, TNextValue> onValue) {
         if (errorOr.isError()) {
-            return ErrorOr.from(errorOr.getErrors());
+            return ErrorOr.errors(errorOr.getErrors());
         }
-        return ErrorOr.fromValue(onValue.apply(errorOr.getValue()));
+        return ErrorOr.of(onValue.apply(errorOr.getValue()));
     }
 }
