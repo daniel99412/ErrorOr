@@ -1,38 +1,30 @@
 package io.github.daniel99412.Results;
 
-final class Success {
-    protected ResultTypes resultType = ResultTypes.Success;
-
+final class Success implements Result {
     @Override
-    public String toString() {
-        return resultType.toString();  // Imprime "SUCCESS"
+    public ResultTypes type() {
+        return ResultTypes.Success;
     }
 }
 
-final class Created {
-    protected ResultTypes resultType = ResultTypes.Created;
-
+final class Created implements Result {
     @Override
-    public String toString() {
-        return resultType.toString();  // Imprime "CREATED"
+    public ResultTypes type() {
+        return ResultTypes.Created;
     }
 }
 
-final class Deleted {
-    protected ResultTypes resultType = ResultTypes.Deleted;
-
+final class Deleted implements Result {
     @Override
-    public String toString() {
-        return resultType.toString();  // Imprime "DELETED"
+    public ResultTypes type() {
+        return ResultTypes.Deleted;
     }
 }
 
-final class Updated {
-    protected ResultTypes resultType = ResultTypes.Updated;
-
+final class Updated implements Result {
     @Override
-    public String toString() {
-        return resultType.toString();  // Imprime "UPDATED"
+    public ResultTypes type() {
+        return ResultTypes.Deleted;
     }
 }
 
