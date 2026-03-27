@@ -24,7 +24,7 @@ final class Deleted implements Result {
 final class Updated implements Result {
     @Override
     public ResultTypes type() {
-        return ResultTypes.Deleted;
+        return ResultTypes.Updated;
     }
 }
 
@@ -33,6 +33,11 @@ public final class Results {
     public static final Created created = new Created();
     public static final Deleted deleted = new Deleted();
     public static final Updated updated = new Updated();
+
+    public static final Success SUCCESS = new Success();
+    public static final Created CREATED = new Created();
+    public static final Deleted DELETED = new Deleted();
+    public static final Updated UPDATED = new Updated();
 
     private Results() {}
 }

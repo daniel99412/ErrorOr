@@ -12,6 +12,9 @@ import io.github.daniel99412.ErrorOr.extensions.Match;
 import io.github.daniel99412.ErrorOr.extensions.Then;
 import io.github.daniel99412.ErrorOr.extensions.ThenAsync;
 import io.github.daniel99412.ErrorOr.extensions.Peek;
+import io.github.daniel99412.Results.Result;
+import io.github.daniel99412.Results.ResultTypes;
+import io.github.daniel99412.Results.Results;
 
 import java.util.Collections;
 import java.util.List;
@@ -350,6 +353,54 @@ public class ErrorOr<TValue> implements IErrorOr.WithValue<TValue> {
      */
     public static <TValue> ErrorOr<TValue> of(TValue value) {
         return new ErrorOr<>(value);
+    }
+
+    /**
+     * Factory method to create an ErrorOr representing a successful operation.
+     *
+     * @return An ErrorOr containing the {@link Results#SUCCESS} result.
+     */
+    public static ErrorOr<Result> ofSuccess() { return ErrorOr.of(Results.SUCCESS); }
+
+    /**
+     * Factory method to create an ErrorOr representing a resource creation.
+     *
+     * @return An ErrorOr containing the {@link Results#CREATED} result.
+     */
+    public static ErrorOr<Result> ofCreated() { return ErrorOr.of(Results.CREATED); }
+
+    /**
+     * Factory method to create an ErrorOr representing a successful update operation.
+     *
+     * @return An ErrorOr containing the {@link Results#UPDATED} result.
+     */
+    public static ErrorOr<Result> ofUpdated() { return ErrorOr.of(Results.UPDATED); }
+
+    /**
+     * Factory method to create an ErrorOr representing a successful deletion.
+     *
+     * @return An ErrorOr containing the {@link Results#DELETED} result.
+     */
+    public static ErrorOr<Result> ofDeleted() { return ErrorOr.of(Results.DELETED); }
+
+    /**
+     * Converts the current ErrorOr to a Result type based on the specified type.
+     * <p>
+     * If the ErrorOr contains errors, the errors are preserved. Otherwise, the
+     * appropriate Result is returned based on the specified type parameter.
+     *
+     * @param type The type of result to return (Success, Created, Updated, or Deleted).
+     * @return An ErrorOr containing the corresponding Result type.
+     */
+    public ErrorOr<Result> toResult(ResultTypes type) {
+        return isError()
+            ? ErrorOr.errors(getErrors())
+            : ErrorOr.of(switch (type) {
+                case Success -> Results.SUCCESS;
+                case Created -> Results.CREATED;
+                case Updated -> Results.UPDATED;
+                case Deleted -> Results.DELETED;
+            });
     }
 
     /**
