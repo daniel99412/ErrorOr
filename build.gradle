@@ -4,7 +4,15 @@ plugins {
 }
 
 group = "io.github.daniel99412"
-version = "1.0-SNAPSHOT"
+def getVersion = {
+    def envVersion = System.getenv("VERSION")
+    if (envVersion != null && !envVersion.isBlank()) {
+        return envVersion.startsWith("v") ? envVersion.substring(1) : envVersion
+    }
+    "0.0.0"
+}
+
+version = getVersion()
 
 repositories {
     mavenCentral()
