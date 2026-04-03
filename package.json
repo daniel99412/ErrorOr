@@ -1,0 +1,12 @@
+{
+  "name": "erroror",
+  "version": "0.0.0",
+  "private": true,
+  "devDependencies": {
+    "commitizen": "^4.3.0",
+    "cz-conventional-changelog": "^3.3.0"
+  },
+  "scripts": {
+    "commit": "git-cz"
+  }
+}
