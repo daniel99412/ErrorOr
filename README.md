@@ -1,7 +1,7 @@
 # ErrorOr for Java
 
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](#)
-[![Maven Central](https://img.shields.io/maven-central/v/com.dpardo/erroror.svg?label=Maven%20Central)](#)
+[![Build Status](https://github.com/daniel99412/ErrorOr/actions/workflows/release.yml/badge.svg)](https://github.com/daniel99412/ErrorOr/actions)
+[![Maven Central](https://img.shields.io/maven-central/v/com.dpardo/erroror.svg?label=Maven%20Central)](https://search.maven.org/artifact/io.github.daniel99412/ErrorOr)
 [![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 A robust and fluent utility for functional-style error handling in Java, inspired by the popular C# library of the same name.
@@ -21,7 +21,7 @@ Add the library to your project using your favorite build tool.
 
 **Gradle:**
 ```groovy
-implementation 'io.github.daniel99412:ErrorOr:1.0-SNAPSHOT'
+implementation 'io.github.daniel99412:ErrorOr:1.0.0'
 ```
 
 **Maven:**
@@ -29,9 +29,48 @@ implementation 'io.github.daniel99412:ErrorOr:1.0-SNAPSHOT'
 <dependency>
     <groupId>io.github.daniel99412</groupId>
     <artifactId>ErrorOr</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
 </dependency>
 ```
+
+## Quick Start
+
+### ErrorOr
+Use `ErrorOr<T>` when you need to represent either a successful value or detailed error(s).
+
+```java
+// Success
+ErrorOr<String> success = ErrorOr.of("Hello");
+
+// Failure with single error
+ErrorOr<User> notFound = ErrorOr.error(Error.notFound("User.NotFound", "User not found", null));
+
+// Failure with multiple errors
+ErrorOr<User> invalid = ErrorOr.errors(List.of(
+    Error.validation("User.Name", "Name cannot be empty", null),
+    Error.validation("User.Email", "Invalid email format", null)
+));
+```
+
+### Result
+Use `Result` when you only need to indicate success/failure without a value.
+
+```java
+Result success = Results.SUCCESS;
+Result created = Results.CREATED;
+Result deleted = Results.DELETED;
+Result updated = Results.UPDATED;
+```
+
+### ErrorType
+The library provides built-in error types via `ErrorType` enum:
+- `Unexpected` - For unexpected failures
+- `Validation` - For validation errors
+- `NotFound` - For resource not found
+- `Conflict` - For conflicts (e.g., duplicate entries)
+- `Unauthorized` - For authentication/authorization failures
+- `Forbidden` - For permission denied
+- `Failure` - For generic failures
 
 ## Core Concepts
 
@@ -162,7 +201,24 @@ CompletableFuture<ErrorOr<Void>> asyncResult = userRepository.findByIdAsync("use
 This library is heavily inspired by the C# `ErrorOr` library created by [amantinband](https://github.com/amantinband). His original MIT-licensed project at [github.com/amantinband/error-or](https://github.com/amantinband/error-or) served as the primary reference and inspiration for this Java implementation.
 
 ## Contributing
-Feel free to fork the repository, create a branch, and submit a pull request. Please make sure your code follows the project’s conventions and includes tests.
+
+Feel free to fork the repository, create a branch, and submit a pull request. Please make sure your code follows the project's conventions and includes tests.
+
+### Commit Convention
+
+This project uses [Commitizen](https://commitizen.github.io/) for structured commit messages. Before contributing, install the local dependencies:
+
+```bash
+npm install
+```
+
+Then use the following command to make commits:
+
+```bash
+npm run commit
+```
+
+This will guide you through the commit message format with an interactive prompt.
 
 ## License
 This project is licensed under the GNU General Public License v3 (GPL-3.0) - see the LICENSE file for details.
